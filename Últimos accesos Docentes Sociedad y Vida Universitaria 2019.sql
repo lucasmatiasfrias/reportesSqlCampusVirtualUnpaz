@@ -1,32 +1,28 @@
 SELECT
-    DISTINCT prefix_course.shortname AS curso,
-    prefix_user.username AS nombre_usuario,
-    prefix_user.firstname AS nombre,
-    prefix_user.lastname AS apellido,
-    prefix_user.email AS Mail,
-    prefix_role.shortname AS rol_de_usuario,
-    to_timestamp(prefix_user_lastaccess.timeaccess) AS ultimo_acceso_al_curso
-FROM
+    concat('<a target="_new" href="%%WWWROOT%%/course/view.php?id=', c.id, '">', c.shortname, '</a>') as "Aula Virtual",
+    u.username AS nombre_usuario,
+    u.firstname AS nombre,
+    u.lastname AS apellido,
+    r.shortname AS rol_de_usuario,
     (
-        (
-            (
-                (
-                    (
-                        prefix_user
-                        INNER JOIN prefix_role_assignments ON prefix_user.id = prefix_role_assignments.userid
-                    )
-                    INNER JOIN prefix_role ON prefix_role_assignments.roleid = prefix_role.id
-                )
-                INNER JOIN prefix_user_enrolments ON prefix_user.id = prefix_user_enrolments.userid
-            )
-            INNER JOIN prefix_enrol ON prefix_user_enrolments.enrolid = prefix_enrol.id
-        )
-        INNER JOIN prefix_course ON prefix_course.id = prefix_enrol.courseid
-    )
-    INNER JOIN prefix_user_lastaccess ON prefix_user_lastaccess.userid = prefix_user.id
-    AND prefix_user_lastaccess.courseid = prefix_course.id
+        CASE
+            WHEN ula.timeaccess is not null THEN to_char(to_timestamp(ula.timeaccess), 'DD Mon YYYY')
+            ELSE 'Nunca'
+        END
+) as "Ultimo Acceso al curso"
+
+FROM
+    prefix_user as u
+    INNER JOIN prefix_role_assignments AS asg ON u.id=asg.userid
+    INNER JOIN prefix_context AS context ON asg.contextid = context.id
+        AND context.contextlevel = 50
+    INNER JOIN prefix_course AS c ON context.instanceid = c.id
+    INNER JOIN prefix_role as r ON asg.roleid = r.id
+    LEFT JOIN prefix_user_lastaccess as ula ON ula.userid = u.id
+        AND ula.courseid = c.id
 WHERE
-    prefix_role.shortname LIKE 'teacher'
-    AND prefix_course.category = 61
-ORDER BY
-    curso asc
+            r.shortname like any
+(array ['teacher','editingteacher'])
+            and c.category in
+(128,129,130)
+order by c.shortname, u.username
