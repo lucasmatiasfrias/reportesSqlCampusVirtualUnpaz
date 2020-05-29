@@ -1,0 +1,13 @@
+SELECT
+    *
+FROM
+    mdl_role_assignments AS asg
+    JOIN mdl_context AS context ON asg.contextid = context.id
+        AND context.contextlevel = 50
+    JOIN mdl_course AS course ON context.instanceid = course.id
+    JOIN mdl_role as r ON asg.roleid = r.id
+WHERE
+    r.shortname like 'student'
+    and course.visible = 1
+    and course.id in(1145,1148,1204,642,361,362,363,369,366,368,367,1815,1486,365,370,921,700,1820,1821,2331,2336,2335,2334,2333,2332)
+order by asg.userid, course.shortname
