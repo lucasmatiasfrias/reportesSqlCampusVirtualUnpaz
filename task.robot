@@ -1,3 +1,6 @@
+*** Reset user dashboard***
+
+
 *** Settings ***
 Documentation       Template robot main suite.
 Library    RPA.Browser.Selenium    auto_close=${FALSE}
