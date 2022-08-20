@@ -13,19 +13,18 @@ Ejecutar y leer archivo
     Open Workbook    Accedieron.xlsx
     ${usuarios}=    Read Worksheet As Table    header=True
     Close Workbook
-
+    Open Available Browser
     FOR    ${usuario}    IN    @{usuarios}
         Resetear plantilla para un usuario    ${usuario}
     END
 
 Login
-    Input Text When Element Is Visible    id:username    username
-    Input Text When Element Is Visible    id:password    contraseña
+    Input Text When Element Is Visible    id:username    bcoronel
+    Input Text When Element Is Visible    id:password    Braian2022
     Click Button When Visible    id:loginbtn
 
 Cerrar deslogearse
     click Link    Salir
-    Close Browser
 
 Click ingresar como
     Click Link    Ingresar como
@@ -38,7 +37,7 @@ Click resetear plantilla
 
 Resetear plantilla para un usuario
     [Arguments]    ${usuario}
-    Open Available Browser    ${usuario}[Link]
+    Go To   ${usuario}[Link]
     Login
     Click ingresar como
     Click en continuar
@@ -48,3 +47,7 @@ Resetear plantilla para un usuario
 *** Tasks ***
 Ejecutar Programa
     Ejecutar y leer archivo
+
+
+
+
