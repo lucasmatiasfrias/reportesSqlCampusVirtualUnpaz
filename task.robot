@@ -19,8 +19,8 @@ Ejecutar y leer archivo
     END
 
 Login
-    Input Text When Element Is Visible    id:username    bcoronel
-    Input Text When Element Is Visible    id:password    Braian2022
+    Input Text When Element Is Visible    id:username    usuario
+    Input Text When Element Is Visible    id:password    contraseña
     Click Button When Visible    id:loginbtn
 
 Cerrar deslogearse
